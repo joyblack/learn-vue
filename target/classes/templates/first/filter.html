@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>过滤器</title>
+    <script th:src="@{/vue.js}"></script>
+    <script th:src="@{/jquery-1.7.2.js}"></script>
+    <script th:src="@{/vue-resource.js}"></script>
+    <script th:src="@{/bootstrap.js}"></script>
+    <link   th:href="@{/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ msg | capitalize }}</h1>
+        <h1>{{ msg | uppercase }}</h1>
+    </div>
+<script>
+    var vm = new Vue(
+        {
+            el: ".container",
+            data:{
+                msg: "china",
+                money: 20
+            },
+            filters: {
+                capitalize: function (value) {
+                    if (!value) return ''
+                    value = value.toString()
+                    return value.charAt(0).toUpperCase() + value.slice(1)
+                },
+                uppercase: function (value) {
+                    if (!value) return ''
+                    value = value.toString()
+                    return value.toUpperCase()
+                },
+            }
+        }
+    );
+</script>
+</body>
+</html>

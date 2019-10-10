@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>交互</title>
+    <script th:src="@{/vue.js}"></script>
+    <script th:src="@{/jquery-1.7.2.js}"></script>
+    <script th:src="@{/vue-resource.js}"></script>
+    <script th:src="@{/bootstrap.js}"></script>
+    <link   th:href="@{/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <form role="form">
+            <div class="form-group">
+                <label>计算a-b</label>
+                <input id="a" name="a" v-model="a" class="form-control" placeholder="输入a...">
+                <input id="b" name="b" v-model="b" class="form-control"  placeholder="输入b...">
+                <button class="btn btn-primary" @click="post()" type="button">计算差值</button>
+                <p class="help-block">计算结果为:{{ computeResult }}</p>
+            </div>
+        </form>
+        <hr>
+        <div class="form-group">
+            <h4 class="text-primary">1、获取get获取数据：{{  getData }}</h4>
+            <button @click="get()" class="btn btn-primary">获取</button>
+        </div>
+
+
+    </div>
+<script>
+    var vm = new Vue(
+        {
+            el: ".container",
+            data:{
+                getData: "",
+                a: 0,
+                b: 0,
+                computeResult: 0
+            },
+            methods: {
+                get: function(){
+                    var my = this;
+                    this.$http.get('[[@{/first/getData}]]').then(function(res){
+                        my.getData = res.bodyText;
+                    },function (reason) { console.log(reason) })
+                },
+                post: function(){
+                    var my = this;
+                    this.$http.post("[[@{/first/compute}]]",{
+                        a: my.a,
+                        b: my.b
+                    },{
+                        emulateJSON: true
+                    }).then(function(res){
+                        console.log(res)
+                        my.computeResult = res.bodyText
+                    },function (reason) { console.log(reason) })
+                }
+            }
+        }
+    );
+</script>
+</body>
+</html>
